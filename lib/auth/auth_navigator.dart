@@ -1,6 +1,7 @@
 import 'package:aticode/auth/auth_cubit.dart';
 
 import 'package:aticode/auth/login/view/login_view.dart';
+import 'package:aticode/auth/register/view/register_view.dart';
 import 'package:aticode/main/view/main_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +13,11 @@ class AuthNavigator extends StatelessWidget {
     return BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
       return Navigator(
         pages: [
-          if (state == AuthState.login) MaterialPage(child: LoginView()),
+          if (state == AuthState.login) MaterialPage(child: MainScreen()),
           if (state == AuthState.signUp ||
               state == AuthState.confirmSignUp) ...[
             MaterialPage(
-              child: Container(),
+              child: RegisterView(),
             ),
             if (state == AuthState.confirmSignUp)
               MaterialPage(

@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
+
 class TeacherDataModel {
   String username;
-  String img;
+  Image img;
 
   TeacherDataModel(this.username, this.img);
 }

@@ -9,7 +9,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginView extends StatelessWidget {
+class RegisterView extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -19,12 +19,12 @@ class LoginView extends StatelessWidget {
         create: (context) => RegisterBloc(
           authRepo: context.read<AuthRepository>(),
         ),
-        child: _loginForm(context),
+        child: _registerForm(context),
       ),
     );
   }
 
-  Widget _loginForm(BuildContext context1) {
+  Widget _registerForm(BuildContext context1) {
     return BlocListener<RegisterBloc, RegisterState>(
         listener: (context, state) {
           if (RegisterUser().formStatus is RegisterSubmissionFailed) {
