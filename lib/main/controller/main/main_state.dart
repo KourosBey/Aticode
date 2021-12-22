@@ -1,3 +1,5 @@
+import 'package:aticode/API/models/teacherModel.dart';
+
 abstract class MainState {}
 
 class InitialStateMainState extends MainState {}
@@ -30,3 +32,16 @@ class MainClickTeacherState extends MainState {
     );
   }
 }
+
+class StoryState extends MainState {
+  final List<Teacher> teachers;
+  StoryState({this.teachers});
+  factory StoryState.initial() => StoryState();
+}
+
+class FailureStory extends StoryState {
+  final Exception e;
+  FailureStory({this.e});
+}
+
+class LoadingStory extends StoryState {}

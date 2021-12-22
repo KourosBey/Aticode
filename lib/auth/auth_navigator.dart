@@ -13,16 +13,12 @@ class AuthNavigator extends StatelessWidget {
     return BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
       return Navigator(
         pages: [
-          if (state == AuthState.login) MaterialPage(child: MainScreen()),
+          if (state == AuthState.login) MaterialPage(child: LoginView()),
           if (state == AuthState.signUp ||
               state == AuthState.confirmSignUp) ...[
             MaterialPage(
               child: RegisterView(),
             ),
-            if (state == AuthState.confirmSignUp)
-              MaterialPage(
-                child: Container(),
-              )
           ],
           if (state == AuthState.mainPage) MaterialPage(child: MainScreen())
         ],

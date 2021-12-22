@@ -1,17 +1,16 @@
-import 'dart:js';
-
+import 'package:aticode/API/models/teacherModel.dart';
 import 'package:aticode/auth/auth_repository.dart';
-import 'package:aticode/auth/form_submission_status.dart';
-import 'package:aticode/auth/login/controller/login_bloc.dart';
-import 'package:aticode/main/controller/main_bloc.dart';
-import 'package:aticode/main/controller/main_event.dart';
-import 'package:aticode/main/controller/main_state.dart';
+
+import 'package:aticode/main/controller/main/main_bloc.dart';
+import 'package:aticode/main/controller/main/main_event.dart';
+import 'package:aticode/main/controller/main/main_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// STORY İLE MAİN BLOC BİRLEŞTİRİLECEK
 class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -21,10 +20,14 @@ class MainScreen extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: BlocProvider(
-          create: (context) => LoginBloc(
-            authRepo: context.read<AuthRepository>(),
-          ),
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => MainBloc(
+                authRepo: context.read<AuthRepository>(),
+              ),
+            ),
+          ],
           child: mainScreenBuilder(context),
         ));
   }
@@ -54,29 +57,43 @@ class MainScreen extends StatelessWidget {
   }
 
   Widget appBar(context) {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(100.0),
-      child: Container(
-        width: MediaQuery.of(context).size.height,
-        height: 100.0,
-        child: ListView(
-          scrollDirection: Axis.horizontal,
+    return BlocConsumer<MainBloc, MainState>(listener: (context, state) {
+      if (state is LoadingStory)
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Ogretmen Verileri Liste halinde
-            activiyFeeds(),
-            activiyFeeds(),
-            activiyFeeds(),
-            activiyFeeds(),
-            activiyFeeds(),
-            activiyFeeds(),
-            activiyFeeds(),
-            activiyFeeds(),
-            activiyFeeds(),
-            activiyFeeds(),
+            CircularProgressIndicator(),
           ],
-        ),
-      ),
-    );
+        );
+      else if (state is FailureStory)
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Text('${state.e}'),
+            ),
+          ],
+        );
+    }, builder: (context, state) {
+      if (state is StoryState) if (state.teachers == null) {
+        return Column(
+          children: [CircularProgressIndicator()],
+        );
+      } else {
+        List<Teacher> teacherModel = state.teachers;
+        return Container(
+          color: Colors.red,
+          child: ListView.builder(
+            itemCount: teacherModel.length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return activiyFeeds(teacherModel[index]);
+            },
+          ),
+        );
+      }
+      return Container();
+    });
   }
 
   Widget myActivies() {
@@ -127,7 +144,7 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  Widget activiyFeeds() {
+  Widget activiyFeeds(Teacher teacher) {
     //Veri gönderilecek UsernameOgretmen
     return BlocBuilder<MainBloc, MainState>(
       builder: (context, state) {
@@ -141,7 +158,8 @@ class MainScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(32),
                     border: Border.all(color: Colors.black38, width: 1),
-                    color: Colors.white,
+                    image: new DecorationImage(
+                        image: new NetworkImage(teacher.kAvatar)),
                   ),
                 ),
                 onTap: () {
@@ -151,7 +169,7 @@ class MainScreen extends StatelessWidget {
                         .add(MainEventTeacherTap(state.username));
                   // Videoya gönderme yapılıcak
                 }),
-            Text("Atilla"), // VT Ogretmen Adı
+            Text(teacher.kAdi), // VT Ogretmen Adı
           ],
         );
       },
