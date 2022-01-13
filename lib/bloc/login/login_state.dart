@@ -14,9 +14,9 @@ class LoginState {
   });
 
   LoginState copyWith({
-    String username,
-    String password,
-    FormSubmissionStatus formStatus,
+    String? username,
+    String? password,
+    FormSubmissionStatus? formStatus,
   }) {
     return LoginState(
       username: username ?? this.username,

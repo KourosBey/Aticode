@@ -1,9 +1,9 @@
 import 'package:aticode/auth/auth_cubit.dart';
 import 'package:aticode/auth/auth_repository.dart';
 import 'package:aticode/auth/form_submission_status.dart';
-import 'package:aticode/auth/login/controller/login_bloc.dart';
-import 'package:aticode/auth/login/controller/login_event.dart';
-import 'package:aticode/auth/login/controller/login_state.dart';
+import 'package:aticode/bloc/login/login_bloc.dart';
+import 'package:aticode/bloc/login/login_event.dart';
+import 'package:aticode/bloc/login/login_state.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -106,7 +106,7 @@ class LoginView extends StatelessWidget {
           ? CircularProgressIndicator()
           : ElevatedButton(
               onPressed: () {
-                if (_formKey.currentState.validate()) {
+                if (_formKey.currentState!.validate()) {
                   context.read<LoginBloc>().add(LoginSubmitted());
                   context1.read<AuthCubit>().showMainPage();
                 }
@@ -124,7 +124,7 @@ class LoginView extends StatelessWidget {
             style: TextStyle(color: Colors.black),
             text: 'If u want Register',
             recognizer: TapGestureRecognizer()
-              ..onTap = () => print("register   "),
+              ..onTap = () => AuthCubit().emit(AuthState.signUp),
             children: [
               TextSpan(style: TextStyle(color: Colors.black45), text: "  or"),
               TextSpan(

@@ -1,4 +1,4 @@
-class ResultModel {
+/*class ResultModel {
   final int responsecode;
   final String responsemessage;
   final dynamic responsedata;
@@ -16,3 +16,4 @@ class ResultModel {
     return data;
   }
 }
+*/

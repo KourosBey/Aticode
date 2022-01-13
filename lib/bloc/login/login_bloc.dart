@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:aticode/auth/auth_repository.dart';
 import 'package:aticode/auth/form_submission_status.dart';
-import 'package:aticode/auth/login/controller/login_event.dart';
-import 'package:aticode/auth/login/controller/login_state.dart';
+import 'package:aticode/bloc/login/login_event.dart';
+import 'package:aticode/bloc/login/login_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // State ve event ayarlaması
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final AuthRepository authRepo;
+  final AuthRepository? authRepo;
 
   LoginBloc({this.authRepo}) : super(LoginState()) {
     on<LoginUsernameChanged>(handleUserNameChange);
@@ -51,7 +51,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       LoginSubmitted event, Emitter<LoginState> emit) async {
     emit(state.copyWith(formStatus: FormSubmitting()));
     try {
-      await authRepo.login();
+      await authRepo!.login();
       emit(state.copyWith(formStatus: SubmissionSucces()));
     } catch (e) {
       emit(state.copyWith(formStatus: SubmissionFailed(e)));

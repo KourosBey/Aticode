@@ -1,4 +1,4 @@
-class Teacher {
+class UserModel {
   int? id;
   String? kTuru;
   String? kEmail;
@@ -7,21 +7,19 @@ class Teacher {
   String? kSifre;
   String? kAvatar;
   List<int>? kIlgi;
-  String? error = "Succesful";
 
-  Teacher({
-    this.id,
-    this.kTuru,
-    this.kEmail,
-    this.kAdi,
-    this.kSoyadi,
-    this.kSifre,
-    this.kAvatar,
-    this.kIlgi,
-  });
+  UserModel(
+      {this.id,
+      this.kAdi,
+      this.kSoyadi,
+      this.kSifre,
+      this.kAvatar,
+      this.kEmail,
+      this.kIlgi,
+      this.kTuru});
 
-  factory Teacher.fromJson(Map<String, dynamic> json) {
-    return Teacher(
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
       id: json["id"],
       kTuru: json["k_Turu"],
       kEmail: json["k_email"],
@@ -42,10 +40,4 @@ class Teacher {
         "k_avatar": kAvatar,
         "k_ilgi": List<dynamic>.from(kIlgi!.map((x) => x)),
       };
-
-  Teacher.withError(String errorMessage) {
-    if (error != errorMessage) {
-      error = errorMessage;
-    }
-  }
 }

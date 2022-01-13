@@ -44,10 +44,10 @@ class RegisterUser {
     this.formStatus = const InitialFormStatus(),
   });
   RegisterUser copyWith({
-    String username,
-    String password,
-    String rePassword,
-    FormSubmissionStatus formStatus,
+    String? username,
+    String? password,
+    String? rePassword,
+    FormSubmissionStatus? formStatus,
   }) {
     return RegisterUser(
       username: username ?? this.username,

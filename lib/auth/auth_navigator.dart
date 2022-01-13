@@ -1,8 +1,9 @@
 import 'package:aticode/auth/auth_cubit.dart';
 
-import 'package:aticode/auth/login/view/login_view.dart';
-import 'package:aticode/auth/register/view/register_view.dart';
-import 'package:aticode/main/view/main_screen.dart';
+import 'package:aticode/views/login_view.dart';
+import 'package:aticode/views/register_view.dart';
+
+import 'package:aticode/views/main_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +21,7 @@ class AuthNavigator extends StatelessWidget {
               child: RegisterView(),
             ),
           ],
-          if (state == AuthState.mainPage) MaterialPage(child: MainScreen())
+          if (state == AuthState.mainPage) MaterialPage(child: MainPage())
         ],
         onPopPage: (route, result) => route.didPop(result),
       );

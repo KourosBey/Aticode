@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:aticode/auth/register/controller/register_event.dart';
-import 'package:aticode/auth/register/controller/register_state.dart';
+import 'package:aticode/bloc/register/register_event.dart';
+import 'package:aticode/bloc/register/register_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:aticode/auth/auth_repository.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
-  final AuthRepository authRepo;
+  final AuthRepository? authRepo;
   RegisterUser user = RegisterUser(username: '', password: '', rePassword: '');
   RegisterBloc({this.authRepo}) : super(RegisterInitState()) {
     on<RegisterUsernameChanged>(registerUsernameHandle);
@@ -35,7 +35,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       RegisterSubmitted event, Emitter<RegisterState> emit) async {
     emit(RegisterSubmitting());
     try {
-      await authRepo.register();
+      await authRepo!.register();
       emit(RegisterSubmitSuccesful());
     } catch (e) {}
   }

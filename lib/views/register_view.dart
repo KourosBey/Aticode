@@ -1,11 +1,10 @@
-import 'package:aticode/auth/register/controller/register_bloc.dart';
-import 'package:aticode/auth/register/controller/register_event.dart';
-import 'package:aticode/auth/register/controller/register_state.dart';
+import 'package:aticode/bloc/register/register_bloc.dart';
+import 'package:aticode/bloc/register/register_event.dart';
+import 'package:aticode/bloc/register/register_state.dart';
 import 'package:aticode/auth/auth_cubit.dart';
 import 'package:aticode/auth/auth_repository.dart';
 import 'package:aticode/auth/form_submission_status.dart';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,9 +27,7 @@ class RegisterView extends StatelessWidget {
     return BlocListener<RegisterBloc, RegisterState>(
         listener: (context, state) {
           if (RegisterUser().formStatus is RegisterSubmissionFailed) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            Container(child: CircularProgressIndicator());
           }
         },
         child: Form(
@@ -51,7 +48,6 @@ class RegisterView extends StatelessWidget {
                   _passField(),
                   _rePassField(),
                   _loginButton(context1),
-                  _registerField(),
                 ],
               ),
             ),
@@ -131,7 +127,7 @@ class RegisterView extends StatelessWidget {
           ? CircularProgressIndicator()
           : ElevatedButton(
               onPressed: () {
-                if (_formKey.currentState.validate()) {
+                if (_formKey.currentState!.validate()) {
                   context.read<RegisterBloc>().add(RegisterSubmitted());
                   context1.read<AuthCubit>().showMainPage();
                 }
@@ -141,28 +137,7 @@ class RegisterView extends StatelessWidget {
     });
   }
 
-  Widget _registerField() {
-    return Padding(
-      padding: EdgeInsets.all(40),
-      child: RichText(
-        text: TextSpan(
-            style: TextStyle(color: Colors.black),
-            text: 'If u want Register',
-            recognizer: TapGestureRecognizer()
-              ..onTap = () => print("register   "),
-            children: [
-              TextSpan(style: TextStyle(color: Colors.black45), text: "  or"),
-              TextSpan(
-                style: TextStyle(color: Colors.black),
-                text: "   Forget password",
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () => print("password"),
-              ),
-            ]),
-      ),
-    );
-  }
-
+  // ignore: unused_element
   void _showSnackBar(BuildContext context, String message) {
     final snackBar = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
