@@ -13,7 +13,7 @@ class InitialStateMainState extends MainState {}
 class LoadingStory extends MainState {}
 
 class LoadedStory extends MainState {
-  final Teacher tModel;
+  final List<Teacher> tModel;
   const LoadedStory(this.tModel);
 }
 

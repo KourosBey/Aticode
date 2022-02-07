@@ -1,21 +1,61 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:aticode/API/models/teacherModel.dart';
+import 'package:aticode/API/models/userLoginModel.dart';
+import 'package:aticode/API/respositories/userPostReq.dart';
+
 import 'package:dio/dio.dart';
 
 class ApiProvider {
   final Dio _dio = Dio();
-  final String _url =
-      "https://mocki.io/v1/ce693f62-8d6c-48ea-b69a-086b5f5a36bc";
+  final String _url = "http://10.0.2.2:8000";
 
-  Future<Teacher> fetchTeacherList() async {
+  Future<List<Teacher>> fetchTeacherList() async {
     try {
-      Response response = await _dio.get(_url);
-      return Teacher.fromJson(response.data);
+      Response response = await _dio.get(_url + "/API/kullanicilar/");
+      return (response.data as List)
+          .map((teacher) => Teacher.fromJson(teacher))
+          .toList();
     } catch (error, stacktrace) {
       print("Exception ocurred: $error stacktrace: $stacktrace");
-      return Teacher.withError("Data not found / Connection issue");
+      throw Exception(error);
+    }
+  }
+
+  Future<UserModelSendReq?> newUserPostRequest(UserModelSendReq user) async {
+    try {
+      Response response = await _dio.post(
+        _url + "/api/register/",
+        options: Options(
+          headers: {HttpHeaders.contentTypeHeader: "application/json"},
+        ),
+        data: user.toJson(),
+      );
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+  Future<Token?> currentUserToken(CurrentUser currentUser) async {
+    try {
+      Response response = await _dio.post(_url + "/api/login/",
+          options: Options(
+            headers: {HttpHeaders.contentTypeHeader: "application/json"},
+          ),
+          data: json.encode(currentUser.toJson()));
+      if (response.statusCode == 200) {
+        return Token.fromJson(json.decode(response.data['token']));
+      } else {
+        print(json.decode(response.data['token']).toString());
+      }
+    } catch (error) {
+      throw Exception(error);
     }
   }
 }
+
+  
 /*
 class APIService<T> {
   final Uri url;

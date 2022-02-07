@@ -1,12 +1,12 @@
 import 'package:aticode/API/models/teacherModel.dart';
+import 'package:aticode/auth/auth_cubit.dart';
 
 import 'package:aticode/bloc/main/main_bloc.dart';
 import 'package:aticode/bloc/main/main_event.dart';
 import 'package:aticode/bloc/main/main_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // STORY İLE MAİN BLOC BİRLEŞTİRİLECEK
@@ -16,6 +16,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainScreen extends State<MainPage> {
+  int _selectedIndex = 0;
   final MainBloc _blocs = MainBloc();
   @override
   void initState() {
@@ -25,12 +26,14 @@ class _MainScreen extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isNeedSafeArea = MediaQuery.of(context).viewPadding.bottom > 0;
     return SafeArea(
       top: true,
       bottom: false,
       child: Scaffold(
-        body: _buildListTeacher(),
+        bottomNavigationBar: _bottomNavBarBloc(),
+        body: SingleChildScrollView(
+          child: _buildListTeacher(),
+        ),
       ),
     );
   }
@@ -60,13 +63,23 @@ class _MainScreen extends State<MainPage> {
                 return Column(children: [
                   Container(
                     padding: EdgeInsets.only(bottom: 10),
-                    height: 115,
-                    child: _buildCard(context, state.tModel),
+                    height: 120,
+                    child: _buildTeacherStory(context, state.tModel),
                   ),
                   Container(
-                    height: 200,
-                    child: _courses(),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(100),
+                      ),
+                    ),
+                    height: 115,
+                    child: _buildCourses(),
                   ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 500,
+                    child: _buildNewsFeed(),
+                  )
                 ]);
               } else if (state is ErrorStory) {
                 return Container();
@@ -84,56 +97,117 @@ class _MainScreen extends State<MainPage> {
     return Center(child: CircularProgressIndicator());
   }
 
-  Widget _courses() {
-    return Expanded(
-        child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 5,
-            itemBuilder: (context, state) {
-              return Container(
-                width: 200,
-                height: 200,
-                margin: EdgeInsets.all(5.0),
-                child: Container(
-                  decoration: BoxDecoration(color: Colors.grey),
-                  margin: EdgeInsets.all(5.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text("Kurslar"),
-                    ],
-                  ),
-                ),
-              );
-            }));
-  }
-
-  Widget _buildCard(BuildContext context, Teacher tModel) {
-    return Expanded(
-      child: ListView.builder(
-        shrinkWrap: true,
+  Widget _buildCourses() {
+    return ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: 5,
-        itemBuilder: (context, index) {
+        itemBuilder: (context, state) {
           return Container(
-            margin: EdgeInsets.all(5.0),
-            child: Container(
-              margin: EdgeInsets.all(5.0),
-              child: Column(
-                children: <Widget>[
-                  CircleAvatar(
-                    maxRadius: 35,
-                    backgroundColor: Colors.grey,
-                  ),
-                  Text("${tModel.kAdi!}"),
-                ],
-              ),
+            width: 400,
+            height: 400,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(80)),
+              color: Colors.lightBlue,
             ),
+            margin: EdgeInsets.all(5.0),
+            child:
+                Container(margin: EdgeInsets.all(10.0), child: Text("Kurslar")),
           );
-        },
+        });
+  }
+
+  Widget _buildNewsFeed() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(10),
+        ),
+      ),
+      child: Card(
+        margin: EdgeInsets.only(left: 10, right: 10, bottom: 40, top: 40),
+        color: Colors.lightBlue,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          topRight: Radius.circular(80),
+        )),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Container(margin: EdgeInsets.all(10), child: Text('Quiz')),
+            _buildQuestion(),
+            _answerButton(context),
+            _answerButton(context),
+            _answerButton(context),
+            _answerButton(context)
+          ],
+        ),
       ),
     );
   }
+
+  Widget _buildTeacherStory(BuildContext context, List<Teacher> tModel) {
+    return ListView.builder(
+      shrinkWrap: true,
+      scrollDirection: Axis.horizontal,
+      itemCount: tModel.length,
+      itemBuilder: (context, index) {
+        return Container(
+          margin: EdgeInsets.all(5.0),
+          child: Container(
+            margin: EdgeInsets.all(5.0),
+            child: Column(
+              children: <Widget>[
+                CircleAvatar(
+                  maxRadius: 35,
+                  backgroundColor: Colors.grey,
+                ),
+                Text("${tModel[index].kAdi!}"),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _bottomNavBarBloc() {
+    return BottomNavigationBar(
+      items: [
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+      ],
+      currentIndex: _selectedIndex,
+      onTap: _onTapped,
+    );
+  }
+
+  void _onTapped(int index) {
+    if (index == 1) context.read<AuthCubit>().showProfilePage();
+  }
+}
+
+Widget _buildQuestion() {
+  return Container(
+    margin: EdgeInsets.all(20),
+    child: Center(child: Text("SORU SORU SORU SORU")),
+  );
+}
+
+Widget _answerButton(context) {
+  return Container(
+      child: Column(
+    children: [
+      Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius?.circular(10),
+          color: Colors.white,
+        ),
+        margin: EdgeInsets.all(10),
+        height: 50,
+        width: MediaQuery.of(context).size.width,
+      )
+    ],
+  ));
 }

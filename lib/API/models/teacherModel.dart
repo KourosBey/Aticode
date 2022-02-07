@@ -1,6 +1,6 @@
 class Teacher {
   int? id;
-  String? kTuru;
+  int? kTuru;
   String? kEmail;
   String? kAdi;
   String? kSoyadi;

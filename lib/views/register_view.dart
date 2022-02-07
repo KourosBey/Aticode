@@ -47,6 +47,7 @@ class RegisterView extends StatelessWidget {
                   _usernameField(),
                   _passField(),
                   _rePassField(),
+                  _emailField(),
                   _loginButton(context1),
                 ],
               ),
@@ -121,6 +122,27 @@ class RegisterView extends StatelessWidget {
     );
   }
 
+  Widget _emailField() {
+    return BlocBuilder<RegisterBloc, RegisterState>(
+      builder: (context, state) {
+        return TextFormField(
+          obscureText: false,
+          decoration: InputDecoration(
+            icon: Icon(Icons.mail),
+            hintText: 'Email',
+            filled: true,
+            fillColor: Colors.white,
+          ),
+          //Textfield control
+
+          onChanged: (value) => context.read<RegisterBloc>().add(
+                RegisterEmailChanged(value),
+              ),
+        );
+      },
+    );
+  }
+
   Widget _loginButton(BuildContext context1) {
     return BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
       return RegisterUser().formStatus is FormSubmitting
@@ -129,7 +151,7 @@ class RegisterView extends StatelessWidget {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   context.read<RegisterBloc>().add(RegisterSubmitted());
-                  context1.read<AuthCubit>().showMainPage();
+                  context1.read<AuthCubit>().showLoginPage();
                 }
               },
               child: Text("Login"),

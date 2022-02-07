@@ -47,7 +47,7 @@ class LoginView extends StatelessWidget {
                 children: [
                   _usernameField(),
                   _passField(),
-                  _loginButton(context1),
+                  _loginButton(),
                   _registerField(),
                 ],
               ),
@@ -100,7 +100,7 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  Widget _loginButton(BuildContext context1) {
+  Widget _loginButton() {
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
       return state.formStatus is FormSubmitting
           ? CircularProgressIndicator()
@@ -108,7 +108,7 @@ class LoginView extends StatelessWidget {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   context.read<LoginBloc>().add(LoginSubmitted());
-                  context1.read<AuthCubit>().showMainPage();
+                  context.read<AuthCubit>().showMainPage();
                 }
               },
               child: Text("Login"),
@@ -117,25 +117,28 @@ class LoginView extends StatelessWidget {
   }
 
   Widget _registerField() {
-    return Padding(
-      padding: EdgeInsets.all(40),
-      child: RichText(
-        text: TextSpan(
-            style: TextStyle(color: Colors.black),
-            text: 'If u want Register',
-            recognizer: TapGestureRecognizer()
-              ..onTap = () => AuthCubit().emit(AuthState.signUp),
-            children: [
-              TextSpan(style: TextStyle(color: Colors.black45), text: "  or"),
-              TextSpan(
-                style: TextStyle(color: Colors.black),
-                text: "   Forget password",
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () => print("password"),
-              ),
-            ]),
-      ),
-    );
+    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+      return Padding(
+        padding: EdgeInsets.all(40),
+        child: RichText(
+          text: TextSpan(
+              style: TextStyle(color: Colors.black),
+              text: 'If u want Register',
+              recognizer: TapGestureRecognizer()
+                ..onTap = () => context.read<AuthCubit>().showRegisterPage(),
+              children: [
+                TextSpan(style: TextStyle(color: Colors.black45), text: "  or"),
+                TextSpan(
+                  style: TextStyle(color: Colors.black),
+                  text: "   Forget password",
+                  recognizer: TapGestureRecognizer()
+                    ..onTap =
+                        () => context.read<AuthCubit>().showForgetPassword(),
+                ),
+              ]),
+        ),
+      );
+    });
   }
 
   void _showSnackBar(BuildContext context, String message) {

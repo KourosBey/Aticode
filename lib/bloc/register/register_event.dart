@@ -8,6 +8,11 @@ class RegisterUsernameChanged extends RegisterEvent {
   RegisterUsernameChanged(this.username);
 }
 
+class RegisterEmailChanged extends RegisterEvent {
+  final String email;
+  RegisterEmailChanged(this.email);
+}
+
 class RegisterPasswordChanged extends RegisterEvent {
   final String password;
   RegisterPasswordChanged(this.password);

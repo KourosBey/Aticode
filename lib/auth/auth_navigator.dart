@@ -1,6 +1,8 @@
 import 'package:aticode/auth/auth_cubit.dart';
+import 'package:aticode/views/bospage.dart';
 
 import 'package:aticode/views/login_view.dart';
+
 import 'package:aticode/views/register_view.dart';
 
 import 'package:aticode/views/main_screen.dart';
@@ -14,14 +16,24 @@ class AuthNavigator extends StatelessWidget {
     return BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
       return Navigator(
         pages: [
-          if (state == AuthState.login) MaterialPage(child: LoginView()),
+          if (state == AuthState.login)
+            MaterialPage(
+              child: LoginView(),
+            ),
           if (state == AuthState.signUp ||
               state == AuthState.confirmSignUp) ...[
             MaterialPage(
               child: RegisterView(),
             ),
           ],
-          if (state == AuthState.mainPage) MaterialPage(child: MainPage())
+          if (state == AuthState.mainPage)
+            MaterialPage(
+              child: MainPage(),
+            ),
+          if (state == AuthState.profilePage)
+            MaterialPage(
+              child: RouterPage(),
+            ),
         ],
         onPopPage: (route, result) => route.didPop(result),
       );
