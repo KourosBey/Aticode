@@ -31,5 +31,6 @@ class _RouterPage extends State<RouterPage> {
 
   void _onTapped(int index) {
     if (index == 0) context.read<AuthCubit>().showMainPage();
+    if (index == 1) context.read<AuthCubit>().showProfilePage();
   }
 }

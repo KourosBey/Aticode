@@ -2,6 +2,7 @@ import 'package:aticode/auth/auth_cubit.dart';
 import 'package:aticode/views/bospage.dart';
 
 import 'package:aticode/views/login_view.dart';
+import 'package:aticode/views/profile_view.dart';
 
 import 'package:aticode/views/register_view.dart';
 
@@ -32,7 +33,7 @@ class AuthNavigator extends StatelessWidget {
             ),
           if (state == AuthState.profilePage)
             MaterialPage(
-              child: RouterPage(),
+              child: ProfileView(),
             ),
         ],
         onPopPage: (route, result) => route.didPop(result),

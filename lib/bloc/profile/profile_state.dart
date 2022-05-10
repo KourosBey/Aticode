@@ -12,13 +12,13 @@ class ProfileState {
   String? get email => user?.kEmail;
   final FormSubmissionStatus formStatus;
   ProfileState({
-    @required Teacher? user,
+    Teacher? user,
     @required bool? isCurrentUser,
     String? avatarPath,
     String? userDescription,
     this.formStatus = const InitialFormStatus(),
   })  : this.user = user,
-        this.isCurrentUser = isCurrentUser,
+        this.isCurrentUser = false,
         this.avatarPath = avatarPath,
         this.userDescription = userDescription;
   ProfileState copyWith({
@@ -29,7 +29,7 @@ class ProfileState {
   }) {
     return ProfileState(
       user: user ?? this.user,
-      isCurrentUser: this.isCurrentUser,
+      isCurrentUser: true,
       avatarPath: avatarPath ?? this.avatarPath,
       userDescription: userDescription ?? this.userDescription,
       formStatus: formStatus ?? this.formStatus,

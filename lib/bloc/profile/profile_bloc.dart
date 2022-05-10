@@ -5,8 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  ProfileBloc({@required Teacher? user, @required bool? isCurrentUser})
-      : super(ProfileState(user: user!, isCurrentUser: isCurrentUser!));
+  ProfileBloc({@required bool? isCurrentUser})
+      : super(ProfileState(isCurrentUser: isCurrentUser!));
 
   @override
   Stream<ProfileState> mapEventToState(ProfileEvent event) async* {

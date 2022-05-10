@@ -9,7 +9,9 @@ class ProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => ProfileBloc(isCurrentUser: true, user: null),
+        create: (context) => ProfileBloc(
+              isCurrentUser: true,
+            ),
         child: Scaffold(
           appBar: AppBar(),
           body: _profilePage(),
@@ -80,7 +82,7 @@ class ProfileView extends StatelessWidget {
       return ListTile(
         tileColor: Colors.white,
         leading: Icon(Icons.person),
-        title: Text(state.username!),
+        title: Text("Atilla"),
       );
     });
   }
@@ -90,7 +92,7 @@ class ProfileView extends StatelessWidget {
       return ListTile(
         tileColor: Colors.white,
         leading: Icon(Icons.mail),
-        title: Text(state.email!),
+        title: Text("atillagmeric@gmail.com"),
       );
     });
   }
@@ -105,7 +107,7 @@ class ProfileView extends StatelessWidget {
           decoration: InputDecoration.collapsed(
               hintText: state.isCurrentUser!
                   ? 'Say something about yourself'
-                  : 'This user hasn\'t updated their profile'),
+                  : 'Açıklama Yazınız'),
           maxLines: null,
           readOnly: !state.isCurrentUser!,
           toolbarOptions: ToolbarOptions(

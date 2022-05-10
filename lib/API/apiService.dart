@@ -13,7 +13,7 @@ class ApiProvider {
 
   Future<List<Teacher>> fetchTeacherList() async {
     try {
-      Response response = await _dio.get(_url + "/API/kullanicilar/");
+      Response response = await _dio.get(_url + "/api/login/kullanicilar");
       return (response.data as List)
           .map((teacher) => Teacher.fromJson(teacher))
           .toList();
