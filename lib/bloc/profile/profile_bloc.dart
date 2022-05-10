@@ -1,4 +1,6 @@
+import 'package:aticode/API/models/postModel.dart';
 import 'package:aticode/API/models/teacherModel.dart';
+import 'package:aticode/API/respositories/postResp.dart';
 import 'package:aticode/bloc/profile/profile_event.dart';
 import 'package:aticode/bloc/profile/profile_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +12,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   @override
   Stream<ProfileState> mapEventToState(ProfileEvent event) async* {
+    if (event is ProfileEvent) List<PostModel> pList = await loadLocalJson();
     if (event is ChangeAvatarRequest) {
       // show action sheet
     } else if (event is OpenImagePicker) {
